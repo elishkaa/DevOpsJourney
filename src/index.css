@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/* ---------- Theme tokens (dark ops-terminal default, light override) ---------- */
+:root {
+  --c-base: #0b1220;
+  --c-surface: #111a2e;
+  --c-raised: #17223c;
+  --c-line: #223052;
+  --c-line-strong: #2e4068;
+  --c-ink: #e8eefb;
+  --c-muted: #93a4c4;
+  --c-faint: #5c6d8f;
+  --c-brand: #2dd4bf;
+  --c-brand-soft: rgba(45, 212, 191, 0.12);
+  --c-ok: #34d399;
+  --c-ok-soft: rgba(52, 211, 153, 0.12);
+  --c-warn: #fbbf24;
+  --c-warn-soft: rgba(251, 191, 36, 0.12);
+  --c-danger: #f87171;
+  --c-danger-soft: rgba(248, 113, 113, 0.12);
+  --c-gold: #f5b93c;
+  color-scheme: dark;
+}
+html.light {
+  --c-base: #f2f5fb;
+  --c-surface: #ffffff;
+  --c-raised: #ffffff;
+  --c-line: #dde4f0;
+  --c-line-strong: #c3cee2;
+  --c-ink: #16223c;
+  --c-muted: #55688c;
+  --c-faint: #93a2bd;
+  --c-brand: #0d9488;
+  --c-brand-soft: rgba(13, 148, 136, 0.1);
+  --c-ok: #059669;
+  --c-ok-soft: rgba(5, 150, 105, 0.1);
+  --c-warn: #b45309;
+  --c-warn-soft: rgba(180, 83, 9, 0.1);
+  --c-danger: #dc2626;
+  --c-danger-soft: rgba(220, 38, 38, 0.08);
+  --c-gold: #b45309;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-base: var(--c-base);
+  --color-surface: var(--c-surface);
+  --color-raised: var(--c-raised);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-faint: var(--c-faint);
+  --color-brand: var(--c-brand);
+  --color-brand-soft: var(--c-brand-soft);
+  --color-ok: var(--c-ok);
+  --color-ok-soft: var(--c-ok-soft);
+  --color-warn: var(--c-warn);
+  --color-warn-soft: var(--c-warn-soft);
+  --color-danger: var(--c-danger);
+  --color-danger-soft: var(--c-danger-soft);
+  --color-gold: var(--c-gold);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+html, body, #root {
+  min-height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--c-base);
+  color: var(--c-ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* subtle grid backdrop for the ops feel */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(var(--c-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.14;
+  z-index: 0;
+}
+#root { position: relative; z-index: 1; }
+
+::selection { background: var(--c-brand); color: #06121f; }
+
+/* ---------- Scrollbars ---------- */
+* { scrollbar-width: thin; scrollbar-color: var(--c-line-strong) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--c-line-strong); border-radius: 4px; }
+
+/* ---------- Animations ---------- */
+@keyframes dj-pop {
+  0% { transform: scale(0.85); opacity: 0; }
+  60% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes dj-rise {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes dj-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+@keyframes dj-flicker {
+  0%, 100% { transform: scale(1) rotate(-1.5deg); }
+  30% { transform: scale(1.06) rotate(1deg); }
+  60% { transform: scale(0.97) rotate(-1deg); }
+  80% { transform: scale(1.04) rotate(1.5deg); }
+}
+@keyframes dj-glow {
+  0%, 100% { filter: drop-shadow(0 0 3px rgba(245, 185, 60, 0.55)); }
+  50% { filter: drop-shadow(0 0 10px rgba(245, 185, 60, 0.9)); }
+}
+.dj-pop { animation: dj-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.dj-rise { animation: dj-rise 0.32s ease-out both; }
+.dj-shake { animation: dj-shake 0.4s ease-in-out; }
+.dj-flame { animation: dj-flicker 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
+.dj-glow { animation: dj-glow 2s ease-in-out infinite; }
+html.reduced-motion .dj-pop,
+html.reduced-motion .dj-rise,
+html.reduced-motion .dj-shake,
+html.reduced-motion .dj-flame,
+html.reduced-motion .dj-glow { animation: none; }
+
+/* ---------- Shared primitives ---------- */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 14px;
+}
+.mono { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }

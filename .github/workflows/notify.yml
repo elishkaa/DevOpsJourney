@@ -1,0 +1,71 @@
+name: notify
+
+# Daily challenge email at ~07:00 Asia/Jerusalem, year-round.
+# GitHub cron is UTC and not DST-aware, so we schedule both candidate UTC
+# times and let a guard step check the actual local hour.
+on:
+  schedule:
+    - cron: '0 4 * * *' # 07:00 IDT (summer, UTC+3)
+    - cron: '0 5 * * *' # 07:00 IST (winter, UTC+2)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write # keepalive needs write; everything else is read-only
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    steps:
+      - id: tz
+        name: Is it 07:00 in Jerusalem (or a manual run)?
+        env:
+          HAVE_SECRETS: ${{ secrets.MAIL_USERNAME != '' && secrets.MAIL_PASSWORD != '' && secrets.MAIL_TO != '' }}
+        run: |
+          HOUR=$(TZ=Asia/Jerusalem date +%H)
+          GO=false
+          if [ "$HOUR" = "07" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            GO=true
+          fi
+          if [ "$HAVE_SECRETS" != "true" ]; then
+            echo "::notice::Mail secrets not configured yet (MAIL_USERNAME / MAIL_PASSWORD / MAIL_TO) — skipping email. See README."
+            GO=false
+          fi
+          echo "go=$GO" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        if: steps.tz.outputs.go == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.tz.outputs.go == 'true'
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Build the Challenge of the Day email
+        if: steps.tz.outputs.go == 'true'
+        id: cotd
+        run: |
+          npm ci
+          npx tsx scripts/cotd.mjs
+
+      - name: Send it
+        if: steps.tz.outputs.go == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          to: ${{ secrets.MAIL_TO }}
+          from: DevOpsJourney <${{ secrets.MAIL_USERNAME }}>
+          subject: ${{ steps.cotd.outputs.subject }}
+          html_body: file://mail.html
+
+      # GitHub disables scheduled workflows after 60 days without repo activity.
+      # This keepalive performs a tiny API-side touch to prevent that.
+      - name: Keepalive
+        if: steps.tz.outputs.go == 'true'
+        uses: gautamkrishnar/keepalive-workflow@v2
+        continue-on-error: true
+        with:
+          use_api: true
