@@ -10,7 +10,8 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write # keepalive needs write; everything else is read-only
+  contents: read
+  actions: write # the keepalive step re-enables this workflow to reset GitHub's 60-day timer
 
 jobs:
   email:
@@ -62,10 +63,11 @@ jobs:
           html_body: file://mail.html
 
       # GitHub disables scheduled workflows after 60 days without repo activity.
-      # This keepalive performs a tiny API-side touch to prevent that.
+      # Re-enabling the workflow via the API resets that timer — no third-party
+      # action needed (the previous one got taken down upstream; lesson learned).
       - name: Keepalive
         if: steps.tz.outputs.go == 'true'
-        uses: gautamkrishnar/keepalive-workflow@v2
         continue-on-error: true
-        with:
-          use_api: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --silent -X PUT "repos/${{ github.repository }}/actions/workflows/notify.yml/enable"
