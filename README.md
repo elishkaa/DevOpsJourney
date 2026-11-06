@@ -4,7 +4,10 @@ A personal, gamified, **AI-adaptive DevOps training site**. Every lesson is a re
 **NimbusPay** — a fictional fintech where things break in very educational ways. Fundamentals first,
 served as daily on-call challenges.
 
-**Live site:** `https://<your-login>.github.io/DevOpsJourney/`
+*NimbusPay is a fictional company invented for these exercises; any resemblance to real companies,
+past or present, is coincidental.*
+
+**Live site:** https://elishkaa.github.io/DevOpsJourney/
 
 ## What's inside
 
