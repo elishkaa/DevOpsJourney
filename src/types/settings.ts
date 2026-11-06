@@ -21,7 +21,7 @@ export const BUDGET_AI_MODEL = 'claude-haiku-4-5'
 export function initialSettings(): Settings {
   return {
     schemaVersion: 1,
-    name: 'Eliran',
+    name: 'Engineer',
     onboarded: false,
     anthropicApiKey: null,
     aiModel: DEFAULT_AI_MODEL,

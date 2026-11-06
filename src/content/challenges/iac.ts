@@ -147,7 +147,7 @@ export const iacChallenges = [
       'Only update tags and metadata',
       'Nothing — the -/+ symbol means the change was rejected',
     ],
-    correctIndex: 3 - 3,
+    correctIndex: 0,
     explanation:
       'Plan symbols are a language: `+` create, `-` destroy, `~` update in place, and **`-/+` destroy-then-recreate**. Some attributes (like an RDS identifier) are immutable in the API, so Terraform’s only path to your desired state is replacement — it even tells you which attribute `# forces replacement`. On a stateless web server that is routine; on **ledger-db** it means data loss unless snapshots and a migration plan exist. Reading plans for these symbols before approving is the single highest-value review habit in IaC.',
     fundamental: 'plan-before-apply',

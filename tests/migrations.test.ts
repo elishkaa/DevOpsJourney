@@ -55,7 +55,7 @@ describe('backup', () => {
     const b = buildBackup(freshProgress(), initialSettings(), false)
     const { progress, settings } = parseBackup(JSON.stringify(b))
     expect(progress.subjects.linux.rating).toBe(125)
-    expect(settings.name).toBe('Eliran')
+    expect(settings.name).toBe('Engineer')
   })
 
   it('rejects foreign or broken files', () => {
