@@ -11,8 +11,8 @@ past or present, is coincidental.*
 
 ## What's inside
 
-- **10 subjects**, 190 hand-crafted challenges: Linux & Shell, Git, Networking, Docker, Kubernetes,
-  CI/CD, IaC (Terraform/Ansible), Cloud/AWS, Observability, Security.
+- **10 subjects**, 190 original, hand-reviewed challenges: Linux & Shell, Git, Networking, Docker,
+  Kubernetes, CI/CD, IaC (Terraform/Ansible), Cloud/AWS, Observability, Security.
 - **Adaptive difficulty** — a 5-question placement quiz per subject finds your level (Rookie →
   Operator → Engineer → Architect). Every answer moves an Elo-style rating (0–1000); promotion needs
   a rating threshold *plus* a correct streak, demotion is immediate below the floor, and a 50-point
